@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+    
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>
+            A111280035 小考(1)
+        </title>
+        <!--Bootstrap 5 CSS -->
+        <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+        <style>
+            header { height: 80px; color: #ffffff; background-image:linear-gradient(0deg,
+            #3381b0, #9219c2); font-size: large; line-height: 80px; }main { min-height:
+            60vh;}
+        </style>
+    </head>
+    
+    <body>
+        <header class="col text-center font-weight-bold">
+            使用Visual Studio Code 管理網站製作
+        </header>
+        <nav class="navbar bg-success justify-content-start">
+            <a href="index.html">
+                <button type="button" class="btn btn-success">
+                    Home
+                </button>
+            </a>
+            <a href="photo.html">
+                <button type="button" class="btn btn-success">
+                    照片輪播
+                </button>
+            </a>
+            <a href="music.html">
+                <button type="button" class="btn btn-success">
+                    聽音樂
+                </button>
+            </a>
+            <a href="video.html">
+                <button type="button" class="btn btn-success">
+                    看影片
+                </button>
+            </a>
+        </nav>
+        <main class="container-fluid bg-warning">
+            <div class="row justify-content-center">
+                <div class="mx-auto">
+                    <h3 class="text-center mt-4">
+                        音樂播放
+                    </h3>
+                    <marquee><span id="info"></span></marquee>
+                    <audio id="music_play1" src="musics/01 口ほどにもないKISS.mp3"></audio>
+                    <audio id="music_play2" src="musics/02 友情ピアス.mp3"></audio>
+                    <audio id="music_play3" src="musics/03 猫舌カモミールティー.mp3"></audio>
+                    <audio id="music_play4" src="musics/04 Out of the blue.mp3"></audio>
+                    <audio id="music_play5" src="musics/05 錆びたコンパス.mp3"></audio>
+                    <audio id="music_play6" src="musics/06 ざぶんざざぶん.mp3"></audio>
+                    <center style="padding-top: 10%;">
+                        <button class="btn btn-success" type="button" onclick="start();">播放音樂 &#9654</button>
+                        <button class="btn btn-info" type="button" onclick="pause();">暫停播放 &#9208</button>
+                        <button class="btn btn-info" type="button" onclick="stop();">停止播放 &#9209</button>
+                        <button class="btn btn-success" type="button" onclick="next();">播放下一首</button>
+                        <button class="btn btn-success" type="button" onclick="previous();">播放前一首</button>
+                        <button class="btn btn-info" type="button" onclick="upVolume();">聲音放大 &#8593</button>
+                        <button class="btn btn-info" type="button" onclick="downVolume();">聲音降低 &#8595</button>
+                        <p><font size="5">該首音樂 時間全長：</font><span id="dur_time"></span><br>
+                            <span><font size="5">&nbsp;&nbsp;&nbsp;目前已播放時間：</font></span><span id="cur_time"></span>
+                        </p>
+                    </center>
+                </div>
+            </div>
+        </main>
+        <footer class="row bg-primary py-5">
+            <div class="row mx-0 justify-content-center align-items-center w-100">
+                <div class="text-center text-light bg-dark w-50">
+                    <div>
+                        <strong>
+                            聯絡資訊
+                        </strong>
+                    </div>
+                    <div>
+                        <strong>
+                            電話:(02)25381111
+                        </strong>
+                        <br>
+                        <strong>
+                            地址:台北市大直街70號(L棟4樓)
+                        </strong>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <script>
+            play1=document.getElementById("music_play1");
+            play2=document.getElementById("music_play2");
+            play3=document.getElementById("music_play3");
+            play4=document.getElementById("music_play4");
+            play5=document.getElementById("music_play5");
+            play6=document.getElementById("music_play6");
+            musicList=[play1,play2,play3,play4,play5,play6];
+            musicListName=["口ほどにもないKISS","友情ピアス","猫舌カモミールティー","Out of the blue","錆びたコンパス","ざぶんざざぶん"];
+
+            var index=0;
+
+            function start(){
+                var player = musicList[index];
+                var song = musicListName[index];
+                var dur = player.duration;
+                var s1 = parseInt(dur%60).toString().padStart(2, '0');
+                var m1 = parseInt((dur/60)%60).toString().padStart(2, '0');
+                document.getElementById("dur_time").innerHTML = "<font color='blue' size='5'>" + m1 + ":" + s1 + "</font>";
+
+                setInterval("calTime()",1000);
+
+                info.innerHTML = "現在正在播放" + song;
+                player.play();
+            }
+
+            function pause(){
+                var player = musicList[index];
+                player.pause();
+                info.innerHTML = "暫停播放音樂";
+            }
+            function stop(){
+                var player = musicList[index];
+                player.pause();
+                player.currentTime = 0;
+                info.innerHTML = "停止播放音樂";
+            }
+            function next(){
+                var player = musicList[index];
+                player.pause();
+                player.currentTime = 0;
+                index++;
+                if(index>=musicList.length){
+                    index=0;
+                }
+                var player = musicList[index];
+                start();
+            }
+            function previous(){
+                var player = musicList[index];
+                player.pause();
+                player.currentTime = 0;
+                index--;
+                if(index<0){
+                    index=musicList.length-1;
+                }
+                var player = musicList[index];
+                start();
+            }
+            function upVolume(){
+                var player = musicList[index];
+                if(player.volume>=1){
+                    player.volume = 1;
+                }else{
+                    player.volume += 0.1;
+                }
+                start();
+            }
+            function downVolume(){
+                var player = musicList[index];
+                if(player.volume<=0){
+                    player.volume = 0;
+                }else{
+                    player.volume -= 0.1;
+                }
+                start();
+            }
+            function calTime(){
+                var player = musicList[index];
+                var cur = player.currentTime;
+                var s2 = Math.floor(cur % 60).toString().padStart(2, '0');
+                var m2 = Math.floor(cur / 60).toString().padStart(2, '0');
+                document.getElementById("cur_time").innerHTML = "<font color='blue' size='5'>" + m2 + ":" + s2 + "</font>";
+            }
+        </script>
+    </body>
+
+</html>
